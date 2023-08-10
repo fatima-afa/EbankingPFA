@@ -1,0 +1,35 @@
+/* AppHeader container */
+.header {
+display: flex;
+justify-content: space-between;
+align-items: center;
+background-color: white;
+padding: 6px 3%;
+}
+
+.header-right{
+    display: flex;
+    justify-content: space-around;
+}
+.header-left{
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+}
+.p-2{
+    margin: 5px;
+}
+
+/* Sidebar icon style */
+.sidebar-icon {
+    font-size: 24px;
+    cursor: pointer;
+    margin-right: 10px; /* Adjust margin to create space between icon and content */
+}
+
+/* Notification icons style */
+.notification-icon {
+    font-size: 24px;
+    cursor: pointer;
+    margin-left: 10px;
+}

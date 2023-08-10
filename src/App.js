@@ -8,12 +8,9 @@ import SideMenu from "./Components/SideMenu";
 function App() {
   return (
     <div className="App">
-      <AppHeader />
       <div className="SideMenuAndPageContent">
-        <SideMenu></SideMenu>
         <PageContent></PageContent>
       </div>
-      <AppFooter />
     </div>
   );
 }

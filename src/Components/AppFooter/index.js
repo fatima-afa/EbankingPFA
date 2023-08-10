@@ -1,16 +1,27 @@
-import { Typography } from "antd";
+import React from 'react'
 
-function AppFooter() {
+import "./footer.css";
+
+const AppFooter = () => {
   return (
-    <div className="AppFooter">
-      <Typography.Link href="tel:+123456789">+123456789</Typography.Link>
-      <Typography.Link href="https://www.google.com" target={"_blank"}>
-        Privacy Policy
-      </Typography.Link>
-      <Typography.Link href="https://www.google.com" target={"_blank"}>
-        Terms of Use
-      </Typography.Link>
+    <div className='footer'>
+        {/* <div className='sb_footer section_padding '></div> */}
+        <div className='sb_footer-below'>
+            <div className='sb_footer-copyright'>
+                <p>
+                    @{new Date().getFullYear()} Adria-Bt. All right reserved.
+                </p>
+            </div>
+
+            <div className='sb_footer-below-links'>
+                <a href='#'><div><p>Terms & Conditions</p></div></a>
+                <a href='#'><div><p>Privacy</p></div></a>
+                <a href='#'><div><p>Security</p></div></a>
+                <a href='#'><div><p>Cookies</p></div></a>
+            </div>
+        </div>
     </div>
-  );
+  )
 }
+
 export default AppFooter;

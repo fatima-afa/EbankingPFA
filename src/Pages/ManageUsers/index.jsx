@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { Table, Button, Select, Input } from 'antd';
 import {DeleteOutlined, EditOutlined} from "@ant-design/icons"
+import AppHeader from '../../Components/AppHeader';
 
 const { Option } = Select;
 
@@ -49,6 +50,7 @@ const data = [
   },
 ];
 function ManageUsers() {
+  
   const [filterBy, setFilterBy] = useState('all');
   const [searchText, setSearchText] = useState('');
   const [filteredData, setFilteredData] = useState(data);
@@ -177,9 +179,13 @@ function ManageUsers() {
     console.log(`Deleting user with ID: ${userId}`);
   };
   return <>
-  <div>
-      <div style={{ marginBottom: 16 }}>
-        <Select value={filterBy} onChange={handleFilterChange} style={{ marginRight: 8 }}>
+  <AppHeader />
+  <div className="title">
+       <h2>Les devises</h2>
+  </div>
+  <div className='container' style={{ margin:'0px 20px' ,display:'flex' , flexDirection:'space-between' }}>
+      <div style={{ margin:'15px' }}>
+        <Select value={filterBy} onChange={handleFilterChange} style={{ marginRight:'8px'}}>
           <Option value="all">Tous</Option>
           <Option value="Admin">Admin</Option>
           <Option value="Agent">Agent</Option>
@@ -191,10 +197,12 @@ function ManageUsers() {
           style={{ width: 200, marginRight: 8 }}
         />
       </div>
-      <Table dataSource={filteredData} columns={columns} />
-    </div>
+      <div>
+        <Table dataSource={filteredData} columns={columns} />
+      </div>
+  </div>
   
   </>
 }
 
-export default ManageUsers
+export default ManageUsers;

@@ -8,7 +8,7 @@ import { Menu } from "antd";
 import { useEffect, useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 
-function SideMenu() {     
+function SideMenu() {
   const location = useLocation();
   const [selectedKeys, setSelectedKeys] = useState("/admin/addUser");
 
@@ -24,7 +24,7 @@ function SideMenu() {
         className="SideMenuVertical"
         mode="vertical"
         onClick={(item) => {
-          //item.key
+          // item.key
           navigate(item.key);
         }}
         selectedKeys={[selectedKeys]}
@@ -32,7 +32,7 @@ function SideMenu() {
           {
             label: "Utilisateurs",
             icon: <UsergroupAddOutlined />,
-            key: "",
+            key: "users",
             children:[
               {
                 label: "Ajouter un utilisateur",
@@ -40,7 +40,7 @@ function SideMenu() {
                 key:"/admin/addUser",
               },
               {
-                label: "Gerer les utilisateurs",
+                label: "Gérer les utilisateurs",
                 icon: "",
                 key:"/admin/manageUsers",
               },
@@ -48,8 +48,20 @@ function SideMenu() {
           },
           {
             label: "Devises",
-            key: "/admin/devise",
+            key: "currencies",
             icon: <ShopOutlined />,
+            children:[
+              {
+                label: "Ajouter une devise",
+                icon: "",
+                key:"/admin/manageDevise",
+              },
+              {
+                label: "Gérer les devises",
+                icon: "",
+                key:"/admin/devise",
+              },
+            ],
           },
           {
             label: "Orders",

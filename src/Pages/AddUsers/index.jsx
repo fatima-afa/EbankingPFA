@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { Form, Input, Select, Button,  Row, Col, Space, DatePicker} from 'antd';
 import {AppstoreAddOutlined, UserAddOutlined } from "@ant-design/icons"
 import { redirect } from 'react-router-dom';
+import AppHeader from '../../Components/AppHeader';
 
 const { Option } = Select;
 class Agent {
@@ -61,6 +62,7 @@ function AddUser() {
   };
 
   return <>
+  <AppHeader />
   <Space>
   <AppstoreAddOutlined style={{color: `orange`, fontSize: 22}}/>
   <h3 style={{color: `orange`}}>Ajouter un utilisateur</h3>

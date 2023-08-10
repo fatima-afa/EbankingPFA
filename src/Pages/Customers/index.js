@@ -1,6 +1,7 @@
 import { Avatar, Rate, Space, Table, Typography } from "antd";
 import { useEffect, useState } from "react";
 import { getCustomers, getInventory } from "../../API";
+import AppHeader from "../../Components/AppHeader";
 
 function Customers() {
   const [loading, setLoading] = useState(false);
@@ -15,6 +16,8 @@ function Customers() {
   }, []);
 
   return (
+    <>
+    <AppHeader />
     <Space size={20} direction="vertical">
       <Typography.Title level={4}>Customers</Typography.Title>
       <Table
@@ -62,6 +65,7 @@ function Customers() {
         }}
       ></Table>
     </Space>
+    </>
   );
 }
 export default Customers;

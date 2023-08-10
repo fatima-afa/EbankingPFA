@@ -1,63 +1,66 @@
-import { BellFilled, MailOutlined, LogoutOutlined } from "@ant-design/icons";
+import {MenuOutlined, BellFilled, MailOutlined ,LogoutOutlined } from "@ant-design/icons";
 import { Badge, Drawer, Image, List, Space, Typography } from "antd";
 import { useEffect, useState } from "react";
-import { getComments, getOrders } from "../../API";
+// import { getComments, getOrders } from "../../api";
+import './AppHeader.css';
+
+import SideMenu from "../SideMenu/index"
 
 function AppHeader() {
   const [comments, setComments] = useState([]);
   const [orders, setOrders] = useState([]);
   const [commentsOpen, setCommentsOpen] = useState(false);
   const [notificationsOpen, setNotificationsOpen] = useState(false);
-  const handleLogout = () => {
-    
-  };
+  const [sidebarOpen, setSidebarOpen] = useState(false); // State for sidebar
 
-  useEffect(() => {
-    getComments().then((res) => {
-      setComments(res.comments);
-    });
-    getOrders().then((res) => {
-      setOrders(res.products);
-    });
-  }, []);
+//   useEffect(() => {
+//     getComments().then((res) => {
+//       setComments(res.comments);
+//     });
+//     getOrders().then((res) => {
+//       setOrders(res.products);
+//     });
+//   }, []);
 
   return (
-    <div className="AppHeader">
-      <Image
-        width={40}
-        src="https://yt3.ggpht.com/ytc/AMLnZu83ghQ28n1SqADR-RbI2BGYTrqqThAtJbfv9jcq=s176-c-k-c0x00ffffff-no-rj"
-      ></Image>
-      {/*<Typography.Title>Aamir's Dashboard</Typography.Title>
-      <Space>
-        <Badge count={comments.length} dot>
-          <MailOutlined
-            style={{ fontSize: 24 }}
-            onClick={() => {
-              setCommentsOpen(true);
-            }}
-          />
-        </Badge>
-        <Badge count={orders.length}>
-          <BellFilled
-            style={{ fontSize: 24 }}
-            onClick={() => {
-              setNotificationsOpen(true);
-            }}
-          />
-        </Badge>
-      
-      </Space>*/}
-      <Badge >
-          <Space >
+    <div className="header d-flex">
+        <div className="mr-auto p-2 header-left">
+        <div className="">
+          <img src="../../Assets/logo.png"></img>
+        </div>
+          <MenuOutlined
+             className="sidebar-icon"
+              style={{ fontSize: 24 }}
+              onClick={() => {
+                setSidebarOpen(true);
+              }}
+            />
+        </div>
 
-          <LogoutOutlined  style={{ fontSize: 22, color: `red` }}
-      /* onClick={handleLogout}*/ 
-          />
-          <p style={{color: `red`}}>Logout</p>
-        
-          </Space>
-        
-        </Badge>
+        <div className="p-2 d-flex header-right">
+          <div className="p-2">
+          <Badge count={orders.length}>
+            <BellFilled
+              style={{ fontSize: 20 }}
+              onClick={() => {
+                setNotificationsOpen(true);
+              }}
+            />
+          </Badge>
+          </div>
+          <div className="p-2">
+          <Badge count={comments.length} dot>
+            <LogoutOutlined
+              style={{ fontSize: 20 }}
+              onClick={() => {
+                setCommentsOpen(true);
+              }}
+            /> <span style={{ fontSize: 10 }}>LOGOUT</span>
+          </Badge>
+          </div>
+        </div>
+      
+
       <Drawer
         title="Comments"
         open={commentsOpen}
@@ -73,6 +76,7 @@ function AppHeader() {
           }}
         ></List>
       </Drawer>
+
       <Drawer
         title="Notifications"
         open={notificationsOpen}
@@ -92,6 +96,18 @@ function AppHeader() {
             );
           }}
         ></List>
+
+      </Drawer>
+
+      <Drawer
+        title="Hi admin !"
+        placement="left" // Set the placement to "left"
+        visible={sidebarOpen}
+        onClose={() => setSidebarOpen(false)}
+        maskClosable
+        width={300}
+      >
+        <SideMenu />
       </Drawer>
     </div>
   );
