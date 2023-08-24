@@ -5,36 +5,43 @@ import { redirect } from 'react-router-dom';
 
 const { Option } = Select;
 class Agent {
-  constructor(nom, prenom, email, adresse, ville, userName, dateNaissance, matricule, CIN, agence, statut) {
+  constructor(id, nom, prenom, email, adresse, ville,nomUtilisateur, dateNaissance, matricule, CIN, agence, statut,password, sexe, profileDto) {
+    this.id=null;
     this.type = 'agent';
     this.nom = nom;
     this.prenom = prenom;
     this.email = email;
     this.adresse = adresse;
-    this.userName=userName;
     this.dateNaissance=dateNaissance;
     this.matricule=matricule;
     this.CIN=CIN;
     this.agence=agence;
     this.ville=ville;
     this.statut=statut;
+    this.nomUtilisateur=nomUtilisateur;
+    this.password=password;
+    this.sexe=sexe;
+    this.profileDto=profileDto;
+
   }
 }
 
 class Admin {
-  constructor(nom, prenom, email, adresse, ville, userName, dateNaissance, matricule, CIN, agence, statut) {
+  constructor(nom, prenom, email, adresse,nomUtilisateur, dateNaissance, matricule, CIN, agence, statut,password, sexe, profileDto) {
     this.type = 'admin';
     this.nom = nom;
     this.prenom = prenom;
     this.email = email;
     this.adresse = adresse;
-    this.ville = ville;
-    this.userName=userName;
     this.dateNaissance=dateNaissance;
     this.matricule=matricule;
     this.CIN=CIN;
     this.agence=agence;
     this.statut=statut;
+    this.nomUtilisateur=nomUtilisateur;
+    this.password=password;
+    this.sexe=sexe;
+    this.profileDto=profileDto;
   }
 }
 
@@ -51,9 +58,9 @@ function AddUser() {
     console.log('Form values:', values);
     let user;
     if (userType === 'agent') {
-      user = new Agent(values.nom, values.prenom, values.email, values.adresse, values.ville, values.userName, values.dateNaissance, values.matricule, values.CIN, values.agence, values.statut);
+      user = new Agent(values.nom, values.prenom, values.email, values.adresse, values.ville, values.nomUtilisateur, values.dateNaissance, values.matricule, values.CIN, values.agence, values.statut, values.nomUtilisateur, '', values.sexe, null);
     } else {
-      user = new Admin(values.nom, values.prenom, values.email, values.adresse, values.ville, values.userName, values.dateNaissance, values.matricule, values.CIN, values.agence, values.statut);
+      user = new Admin(values.nom, values.prenom, values.email, values.adresse, values.nomUtilisateur, values.dateNaissance, values.matricule, values.CIN, values.agence, values.statut, values.nomUtilisateur, '', values.sexe, null);
     }
 
     console.log('User object:', user);
@@ -82,7 +89,7 @@ function AddUser() {
             </Form.Item>
           </Col>
           <Col span={12}>
-            <Form.Item label="nom utilisateur" name="userName" rules={[{ required: true, message: 'Veuillez entrer nom d\'utilisateur' }]}>
+            <Form.Item label="nom utilisateur" name="nomUtilisateur" rules={[{ required: true, message: 'Veuillez entrer nom d\'utilisateur' }]}>
               <Input />
             </Form.Item>
           </Col>
@@ -130,11 +137,14 @@ function AddUser() {
         </Row>
 
         <Row gutter={16}>
-          <Col span={12}>
-            <Form.Item label="Ville" name="ville" rules={[{ required: true, message: 'Veuillez entrer la ville' }]}>
-              <Input />
-            </Form.Item>
-          </Col>
+        <Col span={12}>
+        <Form.Item label="Sexe" name="sexe" rules={[{ required: true, message: 'Veuillez sélectionner le sexe' }]}>
+          <Select placeholder="Sélectionner le sexe">
+            <Option value="femme">Femme</Option>
+            <Option value="homme">Homme</Option>
+          </Select>
+        </Form.Item>
+      </Col>
           <Col span={12}>
             <Form.Item label="Agence" name="agence" rules={[{ required: true, message: 'Veuillez entrer l\'agence' }]}>
               <Input />
@@ -143,24 +153,29 @@ function AddUser() {
         </Row>
 
         <Row gutter={16}>
+         
           <Col span={12}>
-            <Form.Item label="Statut" name="statut" rules={[{ required: true, message: 'Veuillez entrer le statut' }]}>
-              <Input />
-            </Form.Item>
-          </Col>
-          
-        </Row>
-
-
-       { /*{userType === 'admin' && (
-          <Row gutter={16}>
+        <Form.Item label="Statut" name="statut" rules={[{ required: true, message: 'Veuillez sélectionner le statut' }]}>
+          <Select placeholder="Sélectionner le statut">
+            <Option value="enable">Enable</Option>
+            <Option value="disable">Disable</Option>
+          </Select>
+        </Form.Item>
+      </Col>
+      {userType === 'agent' && (
+         
             <Col span={12}>
               <Form.Item label="Ville" name="ville" rules={[{ required: true, message: 'Veuillez entrer la ville' }]}>
                 <Input />
               </Form.Item>
             </Col>
-          </Row>
-        )}*/}
+         
+        )}
+          
+        </Row>
+
+
+      
 
         <br/>
         <Form.Item >

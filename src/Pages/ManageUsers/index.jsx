@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Table, Button, Select, Input } from 'antd';
+import { Table, Button, Select, Input, Space } from 'antd';
 import {DeleteOutlined, EditOutlined} from "@ant-design/icons"
 
 const { Option } = Select;
@@ -7,7 +7,7 @@ const { Option } = Select;
 const data = [
   {
     id: 1,
-    nom: 'mohammed',
+    nom: 'med',
     prenom: 'marouane',
     email: 'med@ex.om',
     adresse: '123 ma',
@@ -21,7 +21,7 @@ const data = [
   },
   {
     id: 1,
-    nom: 'fatima',
+    nom: 'fati',
     prenom: 'afa',
     email: 'afa@exp.com',
     adresse: 'guelmim St',
@@ -58,7 +58,7 @@ function ManageUsers() {
       title: 'Nom',
       dataIndex: 'nom',
       key: 'nom',
-      width: 80,
+      width: 10,
     },
     {
       title: 'Rôle',
@@ -109,7 +109,7 @@ function ManageUsers() {
       title: 'Date de Naissance',
       dataIndex: 'dateNaissance',
       key: 'dateNaissance',
-      width: 80,
+      width: 50,
     },
     {
       title: 'Matricule',
@@ -134,11 +134,14 @@ function ManageUsers() {
       key: 'actions',
       render: (text, record) => (
         <span>
+          <Space>
           <Button  type="primary" size="small" onClick={() => handleEdit(record.id)}><EditOutlined /></Button>
           <Button style={{color: `red`}} type="danger" size="small" onClick={() => handleDelete(record.id)}><DeleteOutlined /></Button>
-        </span>
+       
+          </Space>
+       </span>
       ),
-      width: 100,
+      width: 80,
     },
   ];
 
@@ -188,7 +191,7 @@ function ManageUsers() {
           placeholder="Rechercher"
           value={searchText}
           onChange={handleSearch}
-          style={{ width: 200, marginRight: 8 }}
+          style={{ width: 250, marginRight: 8 }}
         />
       </div>
       <Table dataSource={filteredData} columns={columns} />
