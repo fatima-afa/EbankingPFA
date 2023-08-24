@@ -1,13 +1,27 @@
 import React, { useState } from 'react';
 import { Form, Input, Select, Button,  Row, Col, Space, DatePicker} from 'antd';
 import {AppstoreAddOutlined, UserAddOutlined } from "@ant-design/icons"
+import axios from 'axios'
 import { redirect } from 'react-router-dom';
+//import { createUser } from "../../API";
+
+const createUser = (user) => {
+  axios.post('http://localhost:8888/user/admin', user)
+    .then(response => {
+      // Handle the response data if needed
+      console.log(response.data);
+    })
+    .catch(error => {
+      // Handle errors
+      console.error(error);
+    });
+};
 
 const { Option } = Select;
 class Agent {
   constructor(id, nom, prenom, email, adresse, ville,nomUtilisateur, dateNaissance, matricule, CIN, agence, statut,password, sexe, profileDto) {
     this.id=null;
-    this.type = 'agent';
+   // this.type = 'agent';
     this.nom = nom;
     this.prenom = prenom;
     this.email = email;
@@ -27,8 +41,9 @@ class Agent {
 }
 
 class Admin {
-  constructor(nom, prenom, email, adresse,nomUtilisateur, dateNaissance, matricule, CIN, agence, statut,password, sexe, profileDto) {
-    this.type = 'admin';
+  constructor(id,nom, prenom, email, adresse,nomUtilisateur, dateNaissance, matricule, CIN, agence, statut,password, sexe, profileDto) {
+   // this.type = 'admin';
+   this.id=null;
     this.nom = nom;
     this.prenom = prenom;
     this.email = email;
@@ -58,13 +73,25 @@ function AddUser() {
     console.log('Form values:', values);
     let user;
     if (userType === 'agent') {
-      user = new Agent(values.nom, values.prenom, values.email, values.adresse, values.ville, values.nomUtilisateur, values.dateNaissance, values.matricule, values.CIN, values.agence, values.statut, values.nomUtilisateur, '', values.sexe, null);
+      user = new Agent(null,values.nom, values.prenom, values.email, values.adresse, values.ville, values.nomUtilisateur, values.dateNaissance, values.matricule, values.CIN, values.agence, values.statut,'', values.sexe, null);
+    
     } else {
-      user = new Admin(values.nom, values.prenom, values.email, values.adresse, values.nomUtilisateur, values.dateNaissance, values.matricule, values.CIN, values.agence, values.statut, values.nomUtilisateur, '', values.sexe, null);
+      user = new Admin(null,values.nom, values.prenom, values.email, values.adresse, values.nomUtilisateur, values.dateNaissance, values.matricule, values.CIN, values.agence, values.statut,'', values.sexe, null);
+      console.log('Form user:', user);
+      createUser(user)
+      .then(response => {
+        // Handle the response
+        console.log('User created:', response.data);
+      })
+      .catch(error => {
+        // Handle errors
+        console.error('Error creating user:', error);
+      });
     }
 
     console.log('User object:', user);
     // Vous pouvez maintenant utiliser l'objet 'user' selon vos besoins (par exemple, l'envoyer au serveur)
+
   };
 
   return <>
@@ -140,8 +167,8 @@ function AddUser() {
         <Col span={12}>
         <Form.Item label="Sexe" name="sexe" rules={[{ required: true, message: 'Veuillez sélectionner le sexe' }]}>
           <Select placeholder="Sélectionner le sexe">
-            <Option value="femme">Femme</Option>
-            <Option value="homme">Homme</Option>
+            <Option value="Femme">Femme</Option>
+            <Option value="Homme">Homme</Option>
           </Select>
         </Form.Item>
       </Col>
@@ -157,8 +184,8 @@ function AddUser() {
           <Col span={12}>
         <Form.Item label="Statut" name="statut" rules={[{ required: true, message: 'Veuillez sélectionner le statut' }]}>
           <Select placeholder="Sélectionner le statut">
-            <Option value="enable">Enable</Option>
-            <Option value="disable">Disable</Option>
+            <Option value="Enable">Enable</Option>
+            <Option value="Disable">Disable</Option>
           </Select>
         </Form.Item>
       </Col>

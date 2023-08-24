@@ -1,4 +1,4 @@
-import axios from 'axios'
+//import axios from 'axios'
 export const getOrders = () => {
   return fetch("https://dummyjson.com/carts/1").then((res) => res.json());
 };
@@ -18,7 +18,7 @@ export const getComments = () => {
   return fetch("https://dummyjson.com/comments").then((res) => res.json());
 };
 
-const createUser = (user) => {
+/*const createUser = (user) => {
   axios.post('http://localhost:8888/user/admin', user)
     .then(response => {
       // Handle the response data if needed
@@ -29,3 +29,4 @@ const createUser = (user) => {
       console.error(error);
     });
 };
+*/
