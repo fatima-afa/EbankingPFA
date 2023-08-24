@@ -5,6 +5,8 @@ import "./form";
 import AppHeader from "../../Components/AppHeader/index";
 import "./style.css";
 import { Link,NavLink } from 'react-router-dom';
+import api from '../../API/axios';
+
 
 function Devise() {
   const [loading, setLoading] = useState(false);
@@ -13,32 +15,37 @@ function Devise() {
   const [filterCode, setFilterCode] = useState(""); // New state for filter
  
 
-  const data = [
-    {
-      flag:'../../Assets/MA.png',
-      pays:'Maroc',
-      libelle: 'Dirham Marocaine',
-      code:'mad',
-      numero:'504',
-      taux: '1',
-      etat:'active'
-    }];
+  // const data = [
+  //   {
+  //     flag:'../../Assets/MA.png',
+  //     pays:'Maroc',
+  //     libelle: 'Dirham Marocaine',
+  //     code:'mad',
+  //     numero:'504',
+  //     taux: '1',
+  //     etat:'active'
+  //   }];
     
   useEffect(() => {
     setLoading(true);
-    // getCustomers().then((res) => {
-    //   setDataSource(res.users);
-    //   setLoading(false);
-    // });
-
-     // Filtrez les données en fonction des états filterPays et filterCode
-     const filteredData = data.filter((item) => {
-      const paysMatch = item.pays.toLowerCase().includes(filterPays.toLowerCase());
-      const codeMatch = item.code.toLowerCase().includes(filterCode.toLowerCase());
-      return paysMatch && codeMatch;
+    api.get('http://localhost:8888/devise/all')
+    .then((response) => {
+      setDataSource(response.data);
+      setLoading(false);
+    })
+    .catch((error) => {
+      console.error("Error fetching data:", error);
+      setLoading(false);
     });
 
-    setDataSource(filteredData);
+     // Filtrez les données en fonction des états filterPays et filterCode
+    //  const filteredData = data.filter((item) => {
+    //   const paysMatch = item.pays.toLowerCase().includes(filterPays.toLowerCase());
+    //   const codeMatch = item.code.toLowerCase().includes(filterCode.toLowerCase());
+    //   return paysMatch && codeMatch;
+    // });
+
+    // setDataSource(filteredData);
     setLoading(false);
 
   }, [filterPays, filterCode]);

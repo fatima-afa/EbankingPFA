@@ -181,7 +181,7 @@ function ManageUsers() {
   return <>
   <AppHeader />
   <div className="title">
-       <h2>Les devises</h2>
+       <h2>Gérer les utilisateurs</h2>
   </div>
   <div className='container' style={{ margin:'0px 20px' ,display:'flex' , flexDirection:'space-between' }}>
       <div style={{ margin:'15px' }}>

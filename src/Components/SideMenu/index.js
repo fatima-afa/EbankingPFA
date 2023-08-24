@@ -2,7 +2,7 @@ import {
   UsergroupAddOutlined,
   ShopOutlined,
   ShoppingCartOutlined,
-  UserOutlined,
+  SettingOutlined,
 } from "@ant-design/icons";
 import { Menu } from "antd";
 import { useEffect, useState } from "react";
@@ -64,15 +64,22 @@ function SideMenu() {
             ],
           },
           {
-            label: "Orders",
-            key: "/orders",
-            icon: <ShoppingCartOutlined />,
-          },
-          {
-            label: "Customers",
-            key: "/customers",
-            icon: <UserOutlined />,
-          },
+            label: "Variables globales",
+            key: "/variableGlobales",
+            icon: <SettingOutlined />,
+            children:[
+              {
+                label: "Ajouter une variable globale",
+                icon: "",
+                key:"/admin/VariableGlobale",
+              },
+              {
+                label: "Gérer les variables globales",
+                icon: "",
+                key:"/admin/VariableGlobale",
+              },
+            ],
+          }
         ]}
       ></Menu>
     </div>
