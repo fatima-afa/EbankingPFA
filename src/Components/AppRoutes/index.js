@@ -19,6 +19,7 @@ function AppRoutes() {
       <Route path="/admin/manageUsers" element={<ManageUsers />}></Route>
       <Route path="/admin/devise" element={<Devise/>}></Route>
       <Route path="/admin/manageDevise" element={<ManageDevise />} ></Route>
+      <Route path="/admin/manageDevise/:id" element={<ManageDevise />} ></Route>
       <Route path="/admin/variableGlobale" element={<VariableGlobale />} ></Route>
 
     </Routes>

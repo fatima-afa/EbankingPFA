@@ -1,13 +1,10 @@
 import React, { useRef, useState, useEffect, useContext } from 'react';
+import { useNavigate, useParams } from 'react-router-dom';
 // import AuthContext from "../../context/AuthProvider";
-import axios from '../../API/axios';
+import api from '../../API/axios';
 import "./style.css";
 import AppHeader from '../../Components/AppHeader/index';
 
-
-
-
-const LOGIN_URL='/addDevise';
 
 const ManageDevise = () => {
 
@@ -15,53 +12,76 @@ const ManageDevise = () => {
     const PaysRef = useRef();
     const CodeRef = useRef();
 
-    const [user, setUser] = useState('');
-    const [pwd, setPwd] = useState('');
-    const [email, setEmail] = useState('');
-    const [firstName, setFirstName] = useState('');
-    const [lastName, setLastName] = useState('');
-    const [errMsg, setErrMsg] = useState('');
+    const [dataSource, setDataSource] = useState([]);
+    const [pays, setPays] = useState('');
+    const [libelle, setLibelle] = useState('');
+    const [code, setCode] = useState('');
+    const [numero, setNumero] = useState('');
+    const [tauxEchange, setTauxEchange] = useState('');
     const [success, setSuccess] = useState(false);
     const [showPassword, setShowPassword] = useState(false);
+    const navigate = useNavigate();
+
+
+    const { id } = useParams();
+
 
     useEffect(() => {
-        PaysRef.current.focus();    
-    }, []);
-
-    useEffect(()=>{
-        setErrMsg('');
-    },[user,pwd,email,firstName,lastName])
+        if (id) {
+            // Effectuer une requête GET pour obtenir les détails de la devise existante
+            api.get(`http://localhost:8888/devise/${id}`)
+                .then(response => {
+                    const devise = response.data;
+                    setPays(devise.nom);
+                    setLibelle(devise.deviseDto.libelle);
+                    setNumero(devise.deviseDto.numero);
+                    setCode(devise.deviseDto.code);
+                    setTauxEchange(devise.deviseDto.tauxEchange);
+                })
+                .catch(error => {
+                    console.error("Error fetching devise data:", error);
+                });
+        }
+    }, [id]);
 
     const handleSubmit = async (e) =>{
         e.preventDefault();
+        if(id){
 
-        // try {
-        //     const response = await axios.post(LOGIN_URL,JSON.stringify({user,pwd,email,firstName,lastName}),
-        //     {
-        //         headers: {'Content-Type': 'application/json'},
-        //         withCredentials:true
-        //     }
-        //     );
-        //     setAuth('');
-        //     setUser('');
-        //     setPwd('');
-        //     setEmail('');
-        //     setFirstName('');
-        //     setLastName('');
-        //     setSuccess(true);
-        // } catch (err) {
-        //     if(!err?.response){
-        //         setErrMsg('No server Response');
-        //     }else if(err.response?.status === 400){
-        //         setErrMsg('Missing Username or Password');
-        //     }else if(err.response?.status === 401){
-        //         setErrMsg('Unauthorized');
-        //     }else{
-        //         setErrMsg('Login Failed');
-        //     }
-            
-        //     CodeRef.current.focus();
-        // }
+        const dataToUpdate = {
+            libelle: libelle,
+            tauxEchange: tauxEchange
+        };
+    
+        try {
+            await api.patch(`http://localhost:8888/devise/${id}`, dataToUpdate);
+            setSuccess(true);
+            navigate('/admin/devise');
+        } catch (error) {
+            console.error("Error updating data:", error);
+        }
+    }else{
+        // Ajout d'une nouvelle devise
+        const dataToAdd = {
+            nom: pays,
+            deviseDto: {
+                code:code,
+                numero:numero,
+                statutDevise:"Enable",
+                libelle: libelle,
+                tauxEchange: tauxEchange
+            }
+        };
+
+        try {
+            await api.post('http://localhost:8888/devise/add', dataToAdd);
+            setSuccess(true);
+            navigate('/admin/devise');
+        } catch (error) {
+            console.error("Error adding data:", error);
+        }
+    }
+
     }
 
     return (
@@ -79,23 +99,26 @@ const ManageDevise = () => {
                         id='pays'
                         ref={PaysRef}
                         autoComplete='off'
-                        onChange={(e) => setUser(e.target.value)}
-                        // value={user}
-                        required />
+                        onChange={(e) => setPays(e.target.value)}
+                        value={pays}
+                        required 
+                        disabled={id?true:false}
+                        />
                     <span className="highlight"></span>
                     <span className="bar"></span>
-                    <label>Pays</label>
+                    {id? null :<label>Pays</label>}
                 </div>
 
                 <div className="group">      
                     <input 
                         type="text"
-                        id='libellé'
-                        // ref={}
+                        id='libelle'
+                        // ref={libelleRef}
                         autoComplete='off'
-                        onChange={(e) => setUser(e.target.value)}
-                        // value={user}
-                        required />
+                        onChange={(e) => setLibelle(e.target.value)}
+                        value={libelle}
+                        required 
+                        />
                     <span className="highlight"></span>
                     <span className="bar"></span>
                     <label>Libellé devise</label>
@@ -105,39 +128,43 @@ const ManageDevise = () => {
                     <input 
                         type="number"
                         id='numero'
-                        // ref={numRef}
+                        // ref={numeroRef}
                         autoComplete='off'
-                        onChange={(e) => setUser(e.target.value)}
-                        // value={user}
-                        required />
+                        onChange={(e) => setNumero(e.target.value)}
+                        value={numero}
+                        required 
+                        disabled={id?true:false}
+                        />
                     <span className="highlight"></span>
                     <span className="bar"></span>
-                    <label>Numéro</label>
+                    {id? null :<label>Numéro</label>}
                 </div>
 
                 <div className="group">      
                     <input 
                         type="text"
                         id='code'
-                        // ref={userRef}
+                        // ref={codeRef}
                         autoComplete='off'
-                        onChange={(e) => setUser(e.target.value)}
-                        // value={user}
+                        onChange={(e) => setCode(e.target.value)}
+                        value={code}
                         style={{ textTransform: "uppercase" }}
-                        required />
+                        required 
+                        disabled={id?true:false}
+                        />
                     <span className="highlight"></span>
                     <span className="bar"></span>
-                    <label>Code</label>
+                    {id? null :<label>Code</label>}
                 </div>
 
                 <div className="group mb-0">      
                     <input 
                         type="number"
-                        id='exchangeRate'
-                        // ref={userRef}
+                        id='tauxEchange'
+                        // ref={tauxEchangeRef}
                         autoComplete='off'
-                        onChange={(e) => setUser(e.target.value)}
-                        // value={user}
+                        onChange={(e) => setTauxEchange(e.target.value)}
+                        value={tauxEchange}
                         required />
                     <span className="highlight"></span>
                     <span className="bar"></span>

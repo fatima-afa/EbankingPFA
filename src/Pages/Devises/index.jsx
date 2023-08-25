@@ -1,62 +1,76 @@
 import { Button,Table ,Avatar} from "antd";
-import {DeleteOutlined, EditOutlined} from "@ant-design/icons"
+import { EditOutlined} from "@ant-design/icons"
 import { useEffect, useState } from "react";
 import "./form";
 import AppHeader from "../../Components/AppHeader/index";
 import "./style.css";
-import { Link,NavLink } from 'react-router-dom';
+import { useNavigate  , NavLink } from 'react-router-dom';
 import api from '../../API/axios';
+
 
 
 function Devise() {
   const [loading, setLoading] = useState(false);
   const [dataSource, setDataSource] = useState([]);
-  const [filterPays, setFilterPays] = useState(""); // New state for filter
-  const [filterCode, setFilterCode] = useState(""); // New state for filter
- 
-
-  // const data = [
-  //   {
-  //     flag:'../../Assets/MA.png',
-  //     pays:'Maroc',
-  //     libelle: 'Dirham Marocaine',
-  //     code:'mad',
-  //     numero:'504',
-  //     taux: '1',
-  //     etat:'active'
-  //   }];
+  const [filterPays, setFilterPays] = useState(""); 
+  const [filterCode, setFilterCode] = useState(""); 
+  const navigate = useNavigate();
     
   useEffect(() => {
     setLoading(true);
     api.get('http://localhost:8888/devise/all')
-    .then((response) => {
-      setDataSource(response.data);
-      setLoading(false);
-    })
-    .catch((error) => {
-      console.error("Error fetching data:", error);
-      setLoading(false);
-    });
+      .then((response) => {
+        const formattedData = response.data.map(item => ({
+          key: item.id,
+          flag: 'URL_DU_DRAPEAU', 
+          nom: item.nom,
+          idDevise:item.deviseDto.id,
+          libelleDevise: item.deviseDto.libelle, 
+          code: item.deviseDto.code.toUpperCase(),
+          numero: item.deviseDto.numero,
+          taux: item.deviseDto.tauxEchange,
+          etat: item.deviseDto.statutDevise,
+        }));
+        
 
-     // Filtrez les données en fonction des états filterPays et filterCode
-    //  const filteredData = data.filter((item) => {
-    //   const paysMatch = item.pays.toLowerCase().includes(filterPays.toLowerCase());
-    //   const codeMatch = item.code.toLowerCase().includes(filterCode.toLowerCase());
-    //   return paysMatch && codeMatch;
-    // });
-
-    // setDataSource(filteredData);
-    setLoading(false);
-
+        // Filtrez les données en fonction des états filterPays et filterCode
+        const filteredData = formattedData.filter((item) => {
+          const paysMatch = item.nom.toLowerCase().includes(filterPays.toLowerCase()); 
+          const codeMatch = item.code.toLowerCase().includes(filterCode.toLowerCase());
+          return paysMatch && codeMatch;
+        });
+  
+        setDataSource(filteredData);
+        setLoading(false);
+      })
+      .catch((error) => {
+        console.error("Error fetching data:", error);
+        setLoading(false);
+      });
   }, [filterPays, filterCode]);
+  
+  const handleEdit = (record) => {
+    navigate(`/admin/manageDevise/${record}`);
 
-  const handleEdit = (userId) => {
-    console.log(`Editing user with ID: ${userId}`);
   };
 
-  const handleDelete = (userId) => {
-    console.log(`Deleting user with ID: ${userId}`);
+  const handleStateChange = (record, currentEtat) => {
+    const newEtat = currentEtat === "Enable" ? "Disable" : "Enable";
+  
+    api.patch(`http://localhost:8888/devise/${record}`, { statutDevise: newEtat })
+      .then(() => {
+        // Mettez à jour l'état dans votre dataSource local pour refléter le changement immédiatement
+        const updatedDataSource = dataSource.map(item =>
+          item.idDevise === record ? { ...item, etat: newEtat } : item
+        );
+        setDataSource(updatedDataSource);
+      })
+      .catch(error => {
+        console.error("Error updating state:", error);
+      });
   };
+  
+  
   
   return (
     <>
@@ -104,11 +118,11 @@ function Devise() {
             },
             {
               title: "Pays",
-              dataIndex: "pays",
+              dataIndex: "nom",
             },
             {
               title: "Libellé devise",
-              dataIndex: "libelle",
+              dataIndex: "libelleDevise",
             },
             {
               title: "Code",
@@ -131,6 +145,17 @@ function Devise() {
             {
               title: "État",
               dataIndex: "etat",
+              render: (etat, record) => (
+                <span
+                  style={{
+                    cursor: "pointer",
+                    color: etat === "Enable" ? "green" : "red", // Changez les couleurs selon vos besoins
+                  }}
+                  onClick={() => handleStateChange(record.idDevise, etat)}
+                >
+                  {etat}
+                </span>
+                 ),
             },
             
             {
@@ -142,7 +167,7 @@ function Devise() {
               key: 'actions',
               render: (text, record) => (
                 <span>
-                  <Button  type="primary" size="small" onClick={() => handleEdit(record.id)}><EditOutlined /></Button>
+                  <Button  type="primary" size="small" onClick={() => handleEdit(record.idDevise)}><EditOutlined /></Button>
                 </span>
               ),
               width: 100,
