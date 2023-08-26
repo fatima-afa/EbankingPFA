@@ -1,43 +1,79 @@
 import React, { useState } from 'react';
 import { Form, Input, Select, Button,  Row, Col, Space, DatePicker} from 'antd';
 import {AppstoreAddOutlined, UserAddOutlined } from "@ant-design/icons"
+import axios from 'axios'
 import { redirect } from 'react-router-dom';
+<<<<<<< HEAD
+//import { createUser } from "../../API";
+
+
+=======
 import AppHeader from '../../Components/AppHeader';
+>>>>>>> 5148c50f9db77448fb054abcc3c5ecb94509a886
 
 const { Option } = Select;
 class Agent {
-  constructor(nom, prenom, email, adresse, ville, userName, dateNaissance, matricule, CIN, agence, statut) {
-    this.type = 'agent';
+  constructor(id, nom, prenom, email, adresse, ville,nomUtilisateur, dateNaissance, matricule, cin, agenceDto, statut,password, sexe, profileDto) {
+    this.id=id;
+   // this.type = 'agent';
     this.nom = nom;
     this.prenom = prenom;
     this.email = email;
     this.adresse = adresse;
-    this.userName=userName;
     this.dateNaissance=dateNaissance;
     this.matricule=matricule;
-    this.CIN=CIN;
-    this.agence=agence;
+    this.cin=cin;
+    this.agenceDto=agenceDto;
     this.ville=ville;
     this.statut=statut;
+    this.nomUtilisateur=nomUtilisateur;
+    this.password=password;
+    this.sexe=sexe;
+    this.profileDto=profileDto;
+
   }
 }
 
 class Admin {
-  constructor(nom, prenom, email, adresse, ville, userName, dateNaissance, matricule, CIN, agence, statut) {
-    this.type = 'admin';
+  constructor(id,nom, prenom, email, adresse,nomUtilisateur, dateNaissance, matricule, cin, agenceDto, statut,password, sexe, profileDto) {
+   // this.type = 'admin';
+    this.id=id;
     this.nom = nom;
     this.prenom = prenom;
     this.email = email;
     this.adresse = adresse;
-    this.ville = ville;
-    this.userName=userName;
     this.dateNaissance=dateNaissance;
     this.matricule=matricule;
-    this.CIN=CIN;
-    this.agence=agence;
+    this.cin=cin;
+    this.agenceDto=agenceDto;
     this.statut=statut;
+    this.nomUtilisateur=nomUtilisateur;
+    this.password=password;
+    this.sexe=sexe;
+    this.profileDto=profileDto;
   }
 }
+const createAdmin = (user) => {
+  return fetch('http://localhost:8888/user/admin', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+      'Origin': 'http://localhost:3000'
+    },
+    body: JSON.stringify(user),
+  })
+    .then(response => {
+      if (!response.ok) {
+        console.log("fron here : ",response)
+
+        throw new Error('Network response was not ok');
+      }
+      console.log("from here : ",response)
+      return response.json();
+    });
+};
+
+
 
 function AddUser() {
 
@@ -50,15 +86,30 @@ function AddUser() {
 
   const onFinish = (values) => {
     console.log('Form values:', values);
-    let user;
     if (userType === 'agent') {
-      user = new Agent(values.nom, values.prenom, values.email, values.adresse, values.ville, values.userName, values.dateNaissance, values.matricule, values.CIN, values.agence, values.statut);
+     const user = new Agent(null,values.nom,values.prenom, values.email, values.adresse, values.ville, values.nomUtilisateur, values.dateNaissance, values.matricule, values.CIN, null, values.statut,'', values.sexe, null);
+    
     } else {
-      user = new Admin(values.nom, values.prenom, values.email, values.adresse, values.ville, values.userName, values.dateNaissance, values.matricule, values.CIN, values.agence, values.statut);
+     const user = new Admin(null,values.nom, values.prenom, values.email, values.adresse, values.nomUtilisateur, values.dateNaissance, values.matricule, values.CIN, null, values.statut,'', values.sexe, null);
+     // const t =new Admin(null,"hna","hihihihi",null,null,null,null,null,null,null,null,null,null,null)
+      console.log('Form user:', user);
+      createAdmin(user)
+      .then(createdAdmin => {
+   // Handle the response
+       console.log('Admin created:', createdAdmin);
+        })
+       .catch(error => {
+   // Handle errors
+   console.log('Admin not created:', user);
+      console.error('Error creating Admin:', error);
+  
+  });
+    
     }
 
-    console.log('User object:', user);
+    //console.log('User object:', user);
     // Vous pouvez maintenant utiliser l'objet 'user' selon vos besoins (par exemple, l'envoyer au serveur)
+    
   };
 
   return <>
@@ -84,7 +135,7 @@ function AddUser() {
             </Form.Item>
           </Col>
           <Col span={12}>
-            <Form.Item label="nom utilisateur" name="userName" rules={[{ required: true, message: 'Veuillez entrer nom d\'utilisateur' }]}>
+            <Form.Item label="nom utilisateur" name="nomUtilisateur" rules={[{ required: true, message: 'Veuillez entrer nom d\'utilisateur' }]}>
               <Input />
             </Form.Item>
           </Col>
@@ -132,11 +183,14 @@ function AddUser() {
         </Row>
 
         <Row gutter={16}>
-          <Col span={12}>
-            <Form.Item label="Ville" name="ville" rules={[{ required: true, message: 'Veuillez entrer la ville' }]}>
-              <Input />
-            </Form.Item>
-          </Col>
+        <Col span={12}>
+        <Form.Item label="Sexe" name="sexe" rules={[{ required: true, message: 'Veuillez sélectionner le sexe' }]}>
+          <Select placeholder="Sélectionner le sexe">
+            <Option value="Femme">Femme</Option>
+            <Option value="Homme">Homme</Option>
+          </Select>
+        </Form.Item>
+      </Col>
           <Col span={12}>
             <Form.Item label="Agence" name="agence" rules={[{ required: true, message: 'Veuillez entrer l\'agence' }]}>
               <Input />
@@ -145,24 +199,29 @@ function AddUser() {
         </Row>
 
         <Row gutter={16}>
+         
           <Col span={12}>
-            <Form.Item label="Statut" name="statut" rules={[{ required: true, message: 'Veuillez entrer le statut' }]}>
-              <Input />
-            </Form.Item>
-          </Col>
-          
-        </Row>
-
-
-       { /*{userType === 'admin' && (
-          <Row gutter={16}>
+        <Form.Item label="Statut" name="statut" rules={[{ required: true, message: 'Veuillez sélectionner le statut' }]}>
+          <Select placeholder="Sélectionner le statut">
+            <Option value="Enable">Enable</Option>
+            <Option value="Disable">Disable</Option>
+          </Select>
+        </Form.Item>
+      </Col>
+      {userType === 'agent' && (
+         
             <Col span={12}>
               <Form.Item label="Ville" name="ville" rules={[{ required: true, message: 'Veuillez entrer la ville' }]}>
                 <Input />
               </Form.Item>
             </Col>
-          </Row>
-        )}*/}
+         
+        )}
+          
+        </Row>
+
+
+      
 
         <br/>
         <Form.Item >

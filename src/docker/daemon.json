@@ -1,0 +1,5 @@
+{
+    "ipv6": false,
+    "fixed-cidr-v6": "fd00::/80"
+  }
+  
