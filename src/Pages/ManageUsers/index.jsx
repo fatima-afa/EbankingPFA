@@ -1,57 +1,15 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Table, Button, Select, Input, Space } from 'antd';
-import {DeleteOutlined, EditOutlined} from "@ant-design/icons"
+import { DeleteOutlined, EditOutlined } from '@ant-design/icons';
+import { getAdmins, getAllBOs } from '../../API'; // Assuming you have API functions to fetch admins and agents
 
 const { Option } = Select;
 
-const data = [
-  {
-    id: 1,
-    nom: 'med',
-    prenom: 'marouane',
-    email: 'med@ex.om',
-    adresse: '123 ma',
-    ville: 'New York',
-    userName: 'med.mar',
-    dateNaissance: '1990-01-01',
-    matricule: '1234',
-    CIN: 'ABC12',
-    agence: 'Agence 1',
-    statut: 'Admin',
-  },
-  {
-    id: 1,
-    nom: 'fati',
-    prenom: 'afa',
-    email: 'afa@exp.com',
-    adresse: 'guelmim St',
-    ville: 'guelmim',
-    userName: 'fati.afa',
-    dateNaissance: '2000-01-01',
-    matricule: '123456',
-    CIN: 'ABC123',
-    agence: 'Agence 1',
-    statut: 'Admin',
-  },
-  {
-    id: 1,
-    nom: 'nejwa',
-    prenom: 'leghrissi',
-    email: 'nej@example.com',
-    adresse: 'bni malal',
-    ville: 'bni malal',
-    userName: 'nejwa.leghrissi',
-    dateNaissance: '2000-01-01',
-    matricule: '123456',
-    CIN: 'ABC123',
-    agence: 'Agence 1',
-    statut: 'Agent',
-  },
-];
 function ManageUsers() {
   const [filterBy, setFilterBy] = useState('all');
   const [searchText, setSearchText] = useState('');
-  const [filteredData, setFilteredData] = useState(data);
+  const [filteredData, setFilteredData] = useState([]);
+  const [loading, setLoading] = useState(true);
 
   const columns = [
     {
@@ -59,20 +17,6 @@ function ManageUsers() {
       dataIndex: 'nom',
       key: 'nom',
       width: 10,
-    },
-    {
-      title: 'Rôle',
-      key: 'role',
-      render: (text, record) => {
-        return record.statut === 'Admin' ? 'Admin' : 'Agent';
-      },
-      width: 80,
-    },
-    {
-      title: 'Statut',
-      dataIndex: 'statut',
-      key: 'statut',
-      width: 80,
     },
     {
       title: 'Prénom',
@@ -85,34 +29,15 @@ function ManageUsers() {
       dataIndex: 'email',
       key: 'email',
       width: 80,
-      size:5,
     },
     {
-      title: 'Adresse',
-      dataIndex: 'adresse',
-      key: 'adresse',
+      title: 'nom Utilisateur',
+      dataIndex: 'nomUtilisateur',
+      key: 'nomUtilisateur',
       width: 80,
     },
     {
-      title: 'Ville',
-      dataIndex: 'ville',
-      key: 'ville',
-      width: 80,
-    },
-    {
-      title: 'Username',
-      dataIndex: 'userName',
-      key: 'userName',
-      width: 80,
-    },
-    {
-      title: 'Date de Naissance',
-      dataIndex: 'dateNaissance',
-      key: 'dateNaissance',
-      width: 50,
-    },
-    {
-      title: 'Matricule',
+      title: 'matricule',
       dataIndex: 'matricule',
       key: 'matricule',
       width: 80,
@@ -124,9 +49,21 @@ function ManageUsers() {
       width: 80,
     },
     {
-      title: 'Agence',
-      dataIndex: 'agence',
-      key: 'agence',
+      title: 'adresse',
+      dataIndex: 'adresse',
+      key: 'adresse',
+      width: 80,
+    },
+    {
+      title: 'date Naissance',
+      dataIndex: 'dateNaissance',
+      key: 'dateNaissance',
+      width: 80,
+    },
+    {
+      title: 'Statut',
+      dataIndex: 'statut',
+      key: 'statut',
       width: 80,
     },
     {
@@ -135,15 +72,41 @@ function ManageUsers() {
       render: (text, record) => (
         <span>
           <Space>
-          <Button  type="primary" size="small" onClick={() => handleEdit(record.id)}><EditOutlined /></Button>
-          <Button style={{color: `red`}} type="danger" size="small" onClick={() => handleDelete(record.id)}><DeleteOutlined /></Button>
-       
+            <Button type="primary" size="small" onClick={() => handleEdit(record.id)}>
+              <EditOutlined />
+            </Button>
+            <Button style={{ color: `red` }} type="danger" size="small" onClick={() => handleDelete(record.id)}>
+              <DeleteOutlined />
+            </Button>
           </Space>
-       </span>
+        </span>
       ),
       width: 80,
     },
   ];
+
+  useEffect(() => {
+    // Fetch data from your API when the component mounts
+    async function fetchData() {
+      try {
+        let data;
+        if (filterBy === 'Admin') {
+          data = await getAdmins(); // Fetch admins
+        } else if (filterBy === 'Agent') {
+          data = await getAllBOs(); // Fetch agents or BOs
+        } else {
+          // Handle the case where 'all' is selected
+          data = await getAdmins(); // Fetch admins by default
+        }
+        setFilteredData(data);
+        setLoading(false);
+      } catch (error) {
+        console.error('Error fetching data:', error);
+      }
+    }
+
+    fetchData();
+  }, [filterBy]); // Update data when filterBy changes
 
   const handleFilterChange = (value) => {
     setFilterBy(value);
@@ -157,19 +120,24 @@ function ManageUsers() {
   };
 
   const filterData = (filterBy, searchText) => {
-    let filteredData = data;
+    let filteredResult = filteredData;
+
     if (filterBy !== 'all') {
-      filteredData = data.filter((user) => user.statut === filterBy);
+      filteredResult = filteredResult.filter((user) => user.statut === filterBy);
     }
+
     if (searchText !== '') {
-      filteredData = filteredData.filter(
+      filteredResult = filteredResult.filter(
         (user) =>
           user.nom.toLowerCase().includes(searchText.toLowerCase()) ||
           user.prenom.toLowerCase().includes(searchText.toLowerCase()) ||
-          user.userName.toLowerCase().includes(searchText.toLowerCase())
+          user.nomUtilisateur.toLowerCase().includes(searchText.toLowerCase()) ||
+          user.email.toLowerCase().includes(searchText.toLowerCase())
+        // Add more filters based on your properties
       );
     }
-    setFilteredData(filteredData);
+
+    setFilteredData(filteredResult);
   };
 
   const handleEdit = (userId) => {
@@ -179,8 +147,9 @@ function ManageUsers() {
   const handleDelete = (userId) => {
     console.log(`Deleting user with ID: ${userId}`);
   };
-  return <>
-  <div>
+
+  return (
+    <div>
       <div style={{ marginBottom: 16 }}>
         <Select value={filterBy} onChange={handleFilterChange} style={{ marginRight: 8 }}>
           <Option value="all">Tous</Option>
@@ -194,10 +163,9 @@ function ManageUsers() {
           style={{ width: 250, marginRight: 8 }}
         />
       </div>
-      <Table dataSource={filteredData} columns={columns} />
+      <Table dataSource={filteredData} columns={columns} loading={loading} />
     </div>
-  
-  </>
+  );
 }
 
-export default ManageUsers
+export default ManageUsers;

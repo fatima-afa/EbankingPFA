@@ -5,22 +5,12 @@ import axios from 'axios'
 import { redirect } from 'react-router-dom';
 //import { createUser } from "../../API";
 
-const createUser = (user) => {
-  axios.post('http://localhost:8888/user/admin', user)
-    .then(response => {
-      // Handle the response data if needed
-      console.log(response.data);
-    })
-    .catch(error => {
-      // Handle errors
-      console.error(error);
-    });
-};
+
 
 const { Option } = Select;
 class Agent {
-  constructor(id, nom, prenom, email, adresse, ville,nomUtilisateur, dateNaissance, matricule, CIN, agence, statut,password, sexe, profileDto) {
-    this.id=null;
+  constructor(id, nom, prenom, email, adresse, ville,nomUtilisateur, dateNaissance, matricule, cin, agenceDto, statut,password, sexe, profileDto) {
+    this.id=id;
    // this.type = 'agent';
     this.nom = nom;
     this.prenom = prenom;
@@ -28,8 +18,8 @@ class Agent {
     this.adresse = adresse;
     this.dateNaissance=dateNaissance;
     this.matricule=matricule;
-    this.CIN=CIN;
-    this.agence=agence;
+    this.cin=cin;
+    this.agenceDto=agenceDto;
     this.ville=ville;
     this.statut=statut;
     this.nomUtilisateur=nomUtilisateur;
@@ -41,17 +31,17 @@ class Agent {
 }
 
 class Admin {
-  constructor(id,nom, prenom, email, adresse,nomUtilisateur, dateNaissance, matricule, CIN, agence, statut,password, sexe, profileDto) {
+  constructor(id,nom, prenom, email, adresse,nomUtilisateur, dateNaissance, matricule, cin, agenceDto, statut,password, sexe, profileDto) {
    // this.type = 'admin';
-   this.id=null;
+    this.id=id;
     this.nom = nom;
     this.prenom = prenom;
     this.email = email;
     this.adresse = adresse;
     this.dateNaissance=dateNaissance;
     this.matricule=matricule;
-    this.CIN=CIN;
-    this.agence=agence;
+    this.cin=cin;
+    this.agenceDto=agenceDto;
     this.statut=statut;
     this.nomUtilisateur=nomUtilisateur;
     this.password=password;
@@ -59,6 +49,27 @@ class Admin {
     this.profileDto=profileDto;
   }
 }
+const createAdmin = (user) => {
+  return fetch('http://localhost:8888/user/admin', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+      'Origin': 'http://localhost:3000'
+    },
+    body: JSON.stringify(user),
+  })
+    .then(response => {
+      if (!response.ok) {
+        console.log("fron here : ",response)
+
+        throw new Error('Network response was not ok');
+      }
+      console.log("from here : ",response)
+      return response.json();
+    });
+};
+
+
 
 function AddUser() {
 
@@ -71,27 +82,30 @@ function AddUser() {
 
   const onFinish = (values) => {
     console.log('Form values:', values);
-    let user;
     if (userType === 'agent') {
-      user = new Agent(null,values.nom, values.prenom, values.email, values.adresse, values.ville, values.nomUtilisateur, values.dateNaissance, values.matricule, values.CIN, values.agence, values.statut,'', values.sexe, null);
+     const user = new Agent(null,values.nom,values.prenom, values.email, values.adresse, values.ville, values.nomUtilisateur, values.dateNaissance, values.matricule, values.CIN, null, values.statut,'', values.sexe, null);
     
     } else {
-      user = new Admin(null,values.nom, values.prenom, values.email, values.adresse, values.nomUtilisateur, values.dateNaissance, values.matricule, values.CIN, values.agence, values.statut,'', values.sexe, null);
+     const user = new Admin(null,values.nom, values.prenom, values.email, values.adresse, values.nomUtilisateur, values.dateNaissance, values.matricule, values.CIN, null, values.statut,'', values.sexe, null);
+     // const t =new Admin(null,"hna","hihihihi",null,null,null,null,null,null,null,null,null,null,null)
       console.log('Form user:', user);
-      createUser(user)
-      .then(response => {
-        // Handle the response
-        console.log('User created:', response.data);
-      })
-      .catch(error => {
-        // Handle errors
-        console.error('Error creating user:', error);
-      });
+      createAdmin(user)
+      .then(createdAdmin => {
+   // Handle the response
+       console.log('Admin created:', createdAdmin);
+        })
+       .catch(error => {
+   // Handle errors
+   console.log('Admin not created:', user);
+      console.error('Error creating Admin:', error);
+  
+  });
+    
     }
 
-    console.log('User object:', user);
+    //console.log('User object:', user);
     // Vous pouvez maintenant utiliser l'objet 'user' selon vos besoins (par exemple, l'envoyer au serveur)
-
+    
   };
 
   return <>

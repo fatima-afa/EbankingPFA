@@ -14,8 +14,8 @@ function AppRoutes() {
       <Route path="/inventory" element={<Inventory />}></Route>
       <Route path="/orders" element={<Orders />}></Route>
       <Route path="/customers" element={<Customers />}></Route>
-      <Route path="/admin/addUser" element={<AddUsers />}></Route>
-      <Route path="/admin/manageUsers" element={<ManageUsers />}></Route>
+      <Route path="/user/admin/addUser" element={<AddUsers />}></Route>
+      <Route path="/user/admin/manageUsers" element={<ManageUsers />}></Route>
       <Route path="/admin/devise" element={<Devises />}></Route>
 
 
