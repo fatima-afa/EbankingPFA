@@ -2,13 +2,13 @@ import {
   UsergroupAddOutlined,
   ShopOutlined,
   ShoppingCartOutlined,
-  UserOutlined,
+  SettingOutlined,
 } from "@ant-design/icons";
 import { Menu } from "antd";
 import { useEffect, useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 
-function SideMenu() {     
+function SideMenu() {
   const location = useLocation();
   const [selectedKeys, setSelectedKeys] = useState("/user/admin/addUser");
 
@@ -24,7 +24,7 @@ function SideMenu() {
         className="SideMenuVertical"
         mode="vertical"
         onClick={(item) => {
-          //item.key
+          // item.key
           navigate(item.key);
         }}
         selectedKeys={[selectedKeys]}
@@ -32,7 +32,7 @@ function SideMenu() {
           {
             label: "Utilisateurs",
             icon: <UsergroupAddOutlined />,
-            key: "",
+            key: "users",
             children:[
               {
                 label: "Ajouter un utilisateur",
@@ -40,7 +40,7 @@ function SideMenu() {
                 key:"/user/admin/addUser",
               },
               {
-                label: "Gerer les utilisateurs",
+                label: "Gérer les utilisateurs",
                 icon: "",
                 key:"/user/admin/manageUsers",
               },
@@ -48,19 +48,38 @@ function SideMenu() {
           },
           {
             label: "Devises",
-            key: "/admin/devise",
+            key: "currencies",
             icon: <ShopOutlined />,
+            children:[
+              {
+                label: "Ajouter une devise",
+                icon: "",
+                key:"/admin/manageDevise",
+              },
+              {
+                label: "Gérer les devises",
+                icon: "",
+                key:"/admin/devise",
+              },
+            ],
           },
           {
-            label: "Orders",
-            key: "/orders",
-            icon: <ShoppingCartOutlined />,
-          },
-          {
-            label: "Customers",
-            key: "/customers",
-            icon: <UserOutlined />,
-          },
+            label: "Variables globales",
+            key: "/variableGlobales",
+            icon: <SettingOutlined />,
+            children:[
+              {
+                label: "Ajouter une variable globale",
+                icon: "",
+                key:"/admin/VariableGlobale",
+              },
+              {
+                label: "Gérer les variables globales",
+                icon: "",
+                key:"/admin/VariableGlobale",
+              },
+            ],
+          }
         ]}
       ></Menu>
     </div>

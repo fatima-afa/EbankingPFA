@@ -1,0 +1,41 @@
+
+.footer {
+    background-color: #000000b5;
+    padding: 0px 20px ;
+    text-align: center;
+    margin-top: auto; /* Permet au footer de pousser vers le bas et s'aligner au bas de la page */
+  }
+    
+.sb_footer-below{
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  margin-top: 0.2rem;
+  display: flex;
+  justify-content: space-around;
+}
+  
+.sb_footer-copyright p{
+  font-size: 13px;
+  line-height: 15px;
+  color: white;
+  font-weight: 600;
+}
+  
+  
+.sb_footer-below-links{
+  display: flex;
+  flex-direction: row;
+}
+
+.sb_footer-below-links a{
+  text-decoration: none;
+}
+  
+.sb_footer-below-links p{
+  font-size: 13px;
+  line-height: 15px;
+  margin-left: 2rem;
+  color: white;
+  font-weight: 600;
+}
