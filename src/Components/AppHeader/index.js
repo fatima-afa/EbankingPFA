@@ -1,8 +1,9 @@
-import {MenuOutlined, BellFilled, MailOutlined ,LogoutOutlined } from "@ant-design/icons";
+import {MenuOutlined, BellFilled,LogoutOutlined } from "@ant-design/icons";
 import { Badge, Drawer, Image, List, Space, Typography } from "antd";
 import { useEffect, useState } from "react";
 // import { getComments, getOrders } from "../../api";
 import './AppHeader.css';
+import logo from '../../Assets/logo.png';
 
 import SideMenu from "../SideMenu/index"
 
@@ -26,7 +27,7 @@ function AppHeader() {
     <div className="header d-flex">
         <div className="mr-auto p-2 header-left">
         <div className="">
-          <img src="../../Assets/logo.png"></img>
+          <img src={logo} alt="Logo" width={27}></img>
         </div>
           <MenuOutlined
              className="sidebar-icon"
