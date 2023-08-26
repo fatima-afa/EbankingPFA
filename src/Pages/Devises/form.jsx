@@ -88,7 +88,8 @@ const ManageDevise = () => {
         <>
         <AppHeader />
         <div className="title">
-            <h2>Ajouter une devise:</h2>
+        {id? <h2>Modifier la devise:</h2>:<h2>Ajouter une devise:</h2>}
+
         </div>
             <div className="container" >
             <div className="container-form">

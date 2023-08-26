@@ -3,13 +3,9 @@ import { Form, Input, Select, Button,  Row, Col, Space, DatePicker} from 'antd';
 import {AppstoreAddOutlined, UserAddOutlined } from "@ant-design/icons"
 import axios from 'axios'
 import { redirect } from 'react-router-dom';
-<<<<<<< HEAD
 //import { createUser } from "../../API";
 
-
-=======
 import AppHeader from '../../Components/AppHeader';
->>>>>>> 5148c50f9db77448fb054abcc3c5ecb94509a886
 
 const { Option } = Select;
 class Agent {

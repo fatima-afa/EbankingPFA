@@ -10,7 +10,7 @@ import { useLocation, useNavigate } from "react-router-dom";
 
 function SideMenu() {
   const location = useLocation();
-  const [selectedKeys, setSelectedKeys] = useState("/user/admin/addUser");
+  const [selectedKeys, setSelectedKeys] = useState("/admin/addUser");
 
   useEffect(() => {
     const pathName = location.pathname;
@@ -37,12 +37,12 @@ function SideMenu() {
               {
                 label: "Ajouter un utilisateur",
                 icon: "",
-                key:"/user/admin/addUser",
+                key:"/admin/addUser",
               },
               {
                 label: "Gérer les utilisateurs",
                 icon: "",
-                key:"/user/admin/manageUsers",
+                key:"/admin/manageUsers",
               },
             ],
           },

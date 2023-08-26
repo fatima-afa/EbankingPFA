@@ -1,14 +1,10 @@
-<<<<<<< HEAD
-import React, { useState, useEffect } from 'react';
-import { Table, Button, Select, Input, Space } from 'antd';
-import { DeleteOutlined, EditOutlined } from '@ant-design/icons';
-import { getAdmins, getAllBOs } from '../../API'; // Assuming you have API functions to fetch admins and agents
-=======
-import React, { useState } from 'react';
-import { Table, Button, Select, Input } from 'antd';
+
+import React, { useState ,useEffect} from 'react';
+import { Table, Button, Select, Input,Space } from 'antd';
 import {DeleteOutlined, EditOutlined} from "@ant-design/icons"
 import AppHeader from '../../Components/AppHeader';
->>>>>>> 5148c50f9db77448fb054abcc3c5ecb94509a886
+import { getAdmins, getAllBOs } from '../../API'; // Assuming you have API functions to fetch admins and agents
+
 
 const { Option } = Select;
 
@@ -155,13 +151,7 @@ function ManageUsers() {
   const handleDelete = (userId) => {
     console.log(`Deleting user with ID: ${userId}`);
   };
-<<<<<<< HEAD
 
-  return (
-    <div>
-      <div style={{ marginBottom: 16 }}>
-        <Select value={filterBy} onChange={handleFilterChange} style={{ marginRight: 8 }}>
-=======
   return <>
   <AppHeader />
   <div className="title">
@@ -170,7 +160,6 @@ function ManageUsers() {
   <div className='container' style={{ margin:'0px 20px' ,display:'flex' , flexDirection:'space-between' }}>
       <div style={{ margin:'15px' }}>
         <Select value={filterBy} onChange={handleFilterChange} style={{ marginRight:'8px'}}>
->>>>>>> 5148c50f9db77448fb054abcc3c5ecb94509a886
           <Option value="all">Tous</Option>
           <Option value="Admin">Admin</Option>
           <Option value="Agent">Agent</Option>
@@ -182,14 +171,7 @@ function ManageUsers() {
           style={{ width: 250, marginRight: 8 }}
         />
       </div>
-<<<<<<< HEAD
-      <Table dataSource={filteredData} columns={columns} loading={loading} />
-    </div>
-  );
-}
 
-export default ManageUsers;
-=======
       <div>
         <Table dataSource={filteredData} columns={columns} />
       </div>
@@ -199,4 +181,3 @@ export default ManageUsers;
 }
 
 export default ManageUsers;
->>>>>>> 5148c50f9db77448fb054abcc3c5ecb94509a886
