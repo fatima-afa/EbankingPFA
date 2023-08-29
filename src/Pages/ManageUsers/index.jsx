@@ -252,27 +252,11 @@ function ManageUsers() {
   const handleModalOk = async () => {
     try {
       if (selectedUser.type === 'bo') {
-        await axios.put(`http://localhost:8888/user/bos/${selectedUser.id}`, {
-          adresse: adresseValue, // Use local state variables
-          statut: statutValue,
-          nom : selectedUser.nom,
-          prenom: selectedUser.prenom,
-          nomUtilisateur:selectedUser.nomUtilisateur,
-          matricule:selectedUser.matricule,
-          type:selectedUser.type,
-          password:selectedUser.password,
-          email:selectedUser.email,
-          CIN:selectedUser.CIN,
-          dateNaissance:selectedUser.dateNaissance,
-          sexe:selectedUser.sexe,
-          agenceDto:selectedUser.agenceDto,
-          ProfileDto:selectedUser.ProfileDto,
-          villeDto:selectedUser.villeDto,
-          adminDto:selectedUser.adminDto,
-        });
+        const userbo = new Agent(selectedUser.id,selectedUser.nom, selectedUser.prenom, selectedUser.email, adresseValue,selectedUser.ville, selectedUser.nomUtilisateur, selectedUser.dateNaissance, selectedUser.matricule, selectedUser.CIN, null, statutValue,'', selectedUser.sexe, null,"bo");
+        await axios.put(`http://localhost:8888/user/bos/${selectedUser.id}`, userbo);
         console.log("adress ",adresseValue);
       } else if (selectedUser.type === 'admin') {
-        const userr = new Admin(selectedUser.id,selectedUser.nom, selectedUser.prenom, selectedUser.email, adresseValue, selectedUser.nomUtilisateur, selectedUser.dateNaissance, selectedUser.matricule, selectedUser.CIN, null, statutValue,'', selectedUser.sexe, null);
+        const userr = new Admin(selectedUser.id,selectedUser.nom, selectedUser.prenom, selectedUser.email, adresseValue, selectedUser.nomUtilisateur, selectedUser.dateNaissance, selectedUser.matricule, selectedUser.CIN, null, statutValue,'', selectedUser.sexe, null,"admin");
         await axios.put(`http://localhost:8888/user/admin/${selectedUser.id}`, userr);
       
         console.log("adress ",adresseValue);
@@ -281,7 +265,6 @@ function ManageUsers() {
 
 
       }
-      console.log("after ok",selectedUser);
       setIsModalVisible(false);
       setSelectedUser(null);
       console.log("after ok",selectedUser);
@@ -349,11 +332,19 @@ function ManageUsers() {
 
   return <>
   <AppHeader />
+  <div className="title">
+       <h2>Gérer les utilisateurs</h2>
+  </div>
     <div>
       <div style={{ marginBottom: 16 }}>
         <Select value={filterBy} onChange={handleFilterChange} style={{ marginRight: 8 }}>
 
         {/* <Option value="all">all</Option> */}
+
+  {/* <div className='container' style={{ margin:'0px 20px' ,display:'flex' , flexDirection:'space-between' }}>
+      <div style={{ margin:'15px' }}>
+        <Select value={filterBy} onChange={handleFilterChange} style={{ marginRight:'8px'}}>
+          <Option value="all">Tous</Option> */}
           <Option value="Admin">Admin</Option>
           <Option value="Agent">Agent</Option>
         </Select>
@@ -403,5 +394,9 @@ function ManageUsers() {
     </div>
     </>
 }
+
+
+
+    
 
 export default ManageUsers;

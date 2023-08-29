@@ -6,6 +6,8 @@ import AppHeader from "../../Components/AppHeader/index";
 import "./style.css";
 import { useNavigate  , NavLink } from 'react-router-dom';
 import api from '../../API/axios';
+import countryCodes from './countries.json'; 
+
 
 
 
@@ -20,17 +22,20 @@ function Devise() {
     setLoading(true);
     api.get('http://localhost:8888/devise/all')
       .then((response) => {
-        const formattedData = response.data.map(item => ({
-          key: item.id,
-          flag: 'URL_DU_DRAPEAU', 
-          nom: item.nom,
-          idDevise:item.deviseDto.id,
-          libelleDevise: item.deviseDto.libelle, 
-          code: item.deviseDto.code.toUpperCase(),
-          numero: item.deviseDto.numero,
-          taux: item.deviseDto.tauxEchange,
-          etat: item.deviseDto.statutDevise,
-        }));
+        const formattedData = response.data.map(item => {
+          const countryCode = Object.keys(countryCodes).find(key => countryCodes[key] === item.nom);
+          return{
+            key: item.id,
+            flag: countryCode ? `${process.env.PUBLIC_URL}/flags/${countryCode.toLowerCase()}.png` : '',
+            nom: item.nom,
+            idDevise:item.deviseDto.id,
+            libelleDevise: item.deviseDto.libelle, 
+            code: item.deviseDto.code.toUpperCase(),
+            numero: item.deviseDto.numero,
+            taux: item.deviseDto.tauxEchange,
+            etat: item.deviseDto.statutDevise,
+          };
+        });
         
 
         // Filtrez les données en fonction des états filterPays et filterCode
