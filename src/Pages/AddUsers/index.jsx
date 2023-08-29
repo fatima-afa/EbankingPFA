@@ -3,22 +3,21 @@ import { Form, Input, Select, Button,  Row, Col, Space, DatePicker} from 'antd';
 import {AppstoreAddOutlined, UserAddOutlined } from "@ant-design/icons"
 import axios from 'axios'
 import { redirect } from 'react-router-dom';
-<<<<<<< HEAD
 //import { createUser } from "../../API";
+import { useNavigate, useParams } from 'react-router-dom';
 
 
-=======
+
 import AppHeader from '../../Components/AppHeader';
->>>>>>> 5148c50f9db77448fb054abcc3c5ecb94509a886
 
 const { Option } = Select;
 class Agent {
-  constructor(id, nom, prenom, email, adresse, ville,nomUtilisateur, dateNaissance, matricule, cin, agenceDto, statut,password, sexe, profileDto) {
+  constructor(id, nom, prenom, email, adresse, ville,nomUtilisateur, dateNaissance, matricule, cin, agenceDto, statut,password, sexe, profileDto,type) {
     this.id=id;
-   // this.type = 'agent';
     this.nom = nom;
     this.prenom = prenom;
     this.email = email;
+    this.type=type;
     this.adresse = adresse;
     this.dateNaissance=dateNaissance;
     this.matricule=matricule;
@@ -35,13 +34,14 @@ class Agent {
 }
 
 class Admin {
-  constructor(id,nom, prenom, email, adresse,nomUtilisateur, dateNaissance, matricule, cin, agenceDto, statut,password, sexe, profileDto) {
+  constructor(id,nom, prenom, email, adresse,nomUtilisateur, dateNaissance, matricule, cin, agenceDto, statut,password, sexe, profileDto, type) {
    // this.type = 'admin';
     this.id=id;
     this.nom = nom;
     this.prenom = prenom;
     this.email = email;
     this.adresse = adresse;
+    this.type=type;
     this.dateNaissance=dateNaissance;
     this.matricule=matricule;
     this.cin=cin;
@@ -72,13 +72,32 @@ const createAdmin = (user) => {
       return response.json();
     });
 };
+const createBO = (user) => {
+  return fetch('http://localhost:8888/user/bo', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+      'Origin': 'http://localhost:3000'
+    },
+    body: JSON.stringify(user),
+  })
+    .then(response => {
+      if (!response.ok) {
+        console.log("fron here : ",response)
 
+        throw new Error('Network response was not ok');
+      }
+      console.log("from here : ",response)
+      return response.json();
+    });
+};
 
 
 function AddUser() {
 
   
   const [userType, setUserType] = useState('admin');
+  const navigate = useNavigate();
 
   const handleUserTypeChange = (value) => {
     setUserType(value);
@@ -88,7 +107,15 @@ function AddUser() {
     console.log('Form values:', values);
     if (userType === 'agent') {
      const user = new Agent(null,values.nom,values.prenom, values.email, values.adresse, values.ville, values.nomUtilisateur, values.dateNaissance, values.matricule, values.CIN, null, values.statut,'', values.sexe, null);
-    
+     createBO(user)
+      .then(createdBO => {
+       console.log('BO created:', createdBO);
+       navigate('/user/admin/manageUsers');
+        })
+       .catch(error => {
+      console.error('Error creating BO:', error);
+  
+  });
     } else {
      const user = new Admin(null,values.nom, values.prenom, values.email, values.adresse, values.nomUtilisateur, values.dateNaissance, values.matricule, values.CIN, null, values.statut,'', values.sexe, null);
      // const t =new Admin(null,"hna","hihihihi",null,null,null,null,null,null,null,null,null,null,null)
@@ -97,6 +124,7 @@ function AddUser() {
       .then(createdAdmin => {
    // Handle the response
        console.log('Admin created:', createdAdmin);
+       navigate('/user/admin/manageUsers');
         })
        .catch(error => {
    // Handle errors
@@ -119,16 +147,16 @@ function AddUser() {
   <h3 style={{color: `orange`}}>Ajouter un utilisateur</h3>
   </Space>
   
-    <div>
+    <div className="form-container">
       <Form name="userForm" layout="vertical" onFinish={onFinish}>
         <Form.Item label="Type d'utilisateur">
-          <Select onChange={handleUserTypeChange} value={userType}>
+          <Select onChange={handleUserTypeChange} value={userType} style={{ width: '315px' }}>
             <Option value="agent">Agent</Option>
             <Option value="admin">Admin</Option>
-          </Select>
+          </Select >
         </Form.Item>
 
-        <Row gutter={30}>
+        <Row gutter={30} className="form-row">
           <Col span={12}>
             <Form.Item label="Nom" name="nom" rules={[{ required: true, message: 'Veuillez entrer le nom' }]}>
               <Input />
@@ -136,12 +164,12 @@ function AddUser() {
           </Col>
           <Col span={12}>
             <Form.Item label="nom utilisateur" name="nomUtilisateur" rules={[{ required: true, message: 'Veuillez entrer nom d\'utilisateur' }]}>
-              <Input />
+              <Input style={{ width: '315px' }}/>
             </Form.Item>
           </Col>
         </Row>
 
-        <Row gutter={16}>
+        <Row gutter={30} className="form-row">
         <Col span={12}>
             <Form.Item label="Prénom" name="prenom" rules={[{ required: true, message: 'Veuillez entrer le prénom' }]}>
               <Input />
@@ -150,13 +178,13 @@ function AddUser() {
           
           <Col span={12}>
                 <Form.Item label="Date de Naissance" name="dateNaissance" rules={[{ required: true, message: 'Veuillez choisir la date de naissance' },{type:'date'}]}>
-                      <DatePicker style={{ width: '100%' }} />
+                      <DatePicker style={{ width: '315px' }} />
                  </Form.Item>
             </Col>
 
         </Row>
 
-        <Row gutter={16}>
+        <Row gutter={30} className="form-row">
           <Col span={12}>
             <Form.Item label="Email" name="email" rules={[{ required: true, message: 'Veuillez entrer l\'email' }, { type: 'email', message: 'Veuillez entrer un email valide' }]}>
               <Input />
@@ -164,28 +192,28 @@ function AddUser() {
           </Col>
           <Col span={12}>
             <Form.Item label="Matricule" name="matricule" rules={[{ required: true, message: 'Veuillez entrer  matricule' }]}>
-              <Input />
+              <Input style={{ width: '315px' }}/>
             </Form.Item>
           </Col>
         </Row>
 
-        <Row gutter={16}>
+        <Row gutter={30} className="form-row">
           <Col span={12}>
             <Form.Item label="CIN" name="CIN" rules={[{ required: true, message: 'Veuillez entrer CIN' }]}>
-              <Input />
+              <Input  />
             </Form.Item>
           </Col>
           <Col span={12}>
             <Form.Item label="Adresse" name="adresse" rules={[{ required: true, message: 'Veuillez entrer l\'adresse' }]}>
-              <Input />
+              <Input style={{ width: '315px' }}/>
             </Form.Item>
           </Col>
         </Row>
 
-        <Row gutter={16}>
+        <Row gutter={30} className="form-row">
         <Col span={12}>
         <Form.Item label="Sexe" name="sexe" rules={[{ required: true, message: 'Veuillez sélectionner le sexe' }]}>
-          <Select placeholder="Sélectionner le sexe">
+          <Select placeholder="Sélectionner le sexe"  >
             <Option value="Femme">Femme</Option>
             <Option value="Homme">Homme</Option>
           </Select>
@@ -193,16 +221,16 @@ function AddUser() {
       </Col>
           <Col span={12}>
             <Form.Item label="Agence" name="agence" rules={[{ required: true, message: 'Veuillez entrer l\'agence' }]}>
-              <Input />
+              <Input style={{ width: '315px' }}/>
             </Form.Item>
           </Col>
         </Row>
 
-        <Row gutter={16}>
+        <Row gutter={30} className="form-row">
          
           <Col span={12}>
         <Form.Item label="Statut" name="statut" rules={[{ required: true, message: 'Veuillez sélectionner le statut' }]}>
-          <Select placeholder="Sélectionner le statut">
+          <Select placeholder="Sélectionner le statut" style={{ width: '315px' }}>
             <Option value="Enable">Enable</Option>
             <Option value="Disable">Disable</Option>
           </Select>
@@ -212,7 +240,7 @@ function AddUser() {
          
             <Col span={12}>
               <Form.Item label="Ville" name="ville" rules={[{ required: true, message: 'Veuillez entrer la ville' }]}>
-                <Input />
+                <Input style={{ width: '315px' }} />
               </Form.Item>
             </Col>
          
