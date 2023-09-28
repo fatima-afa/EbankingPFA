@@ -1,20 +1,19 @@
 import { BrowserRouter, Route, Routes } from "react-router-dom";
-import Customers from "../../Pages/Customers";
-import AddUsers from "../../Pages/AddUsers"
-import Dashboard from "../../Pages/Dashbaord";
-import Inventory from "../../Pages/Inventory";
-import Orders from "../../Pages/Orders";
-import ManageUsers from "../../Pages/ManageUsers";
-import Devise from "../../Pages/Devises";
-import ManageDevise from "../../Pages/Devises/form";
+import AddUsers from "../../Pages/Admin/AddUsers"
+import ManageUsers from "../../Pages/Admin/ManageUsers";
+import Devise from "../../Pages/Admin/Devises/index";
+import ManageDevise from "../../Pages/Admin/Devises/form";
 import Login from "../../Pages/Login";
-import VariableGlobale from "../../Pages/VariableGlobale";
+import ParamsGlobale from "../../Pages/Admin/VariableGlobale";
+import Param from "../../Pages/Admin/VariableGlobale/form";
+import Sidebar from "../../Pages/BackOffice/index";
+
 
 function AppRoutes() {
   return (
     <Routes>
 
-      <Route path="/" element={<AddUsers />}></Route> 
+      <Route path="/BackOffice" element={<Sidebar />}></Route> 
       <Route path="/admin" element={<Login />}></Route>
       <Route path="/admin/addUser" element={<AddUsers />}></Route>
       <Route path="/user/admin/manageUsers" element={<ManageUsers />}></Route>
@@ -22,8 +21,13 @@ function AppRoutes() {
       <Route path="/admin/devise" element={<Devise/>}></Route>
       <Route path="/admin/manageDevise" element={<ManageDevise />} ></Route>
       <Route path="/admin/manageDevise/:id" element={<ManageDevise />} ></Route>
-      <Route path="/admin/variableGlobale" element={<VariableGlobale />} ></Route>
 
+      {/* <Route path="/admin/variableGlobale" element={<VariableGlobale />} ></Route>
+      <Route path="/admin/manageParam/:id" element={<ManageParam />} ></Route> */}
+
+      <Route path="/admin/ParamGlobale" element={<Param />} ></Route>
+      <Route path="/admin/ParamGlobale/:id" element={<Param />} ></Route>
+      <Route path="/admin/manageParam" element={<ParamsGlobale />} ></Route>
     </Routes>
   );
 }

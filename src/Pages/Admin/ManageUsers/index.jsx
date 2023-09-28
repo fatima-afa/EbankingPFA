@@ -1,9 +1,10 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState ,useEffect} from 'react';
 import { Table, Button, Select, Input, Space, Modal,Form } from 'antd';
-import { DeleteOutlined, EditOutlined } from '@ant-design/icons';
-import { getAdmins, getAllBOs } from '../../API'; // Assuming you have API functions to fetch admins and agents
-import AppHeader from '../../Components/AppHeader';
+import {DeleteOutlined, EditOutlined} from "@ant-design/icons"
+import AppHeader from '../../../Components/AppHeader';
+import { getAdmins, getAllBOs } from '../../../API'; // Assuming you have API functions to fetch admins and agents
 import axios from 'axios';
+
 
 
 const { Option } = Select;

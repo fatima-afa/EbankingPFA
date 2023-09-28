@@ -26,7 +26,7 @@ function AppHeader() {
   return (
     <div className="header d-flex">
         <div className="mr-auto p-2 header-left">
-        <div className="">
+        <div >
           <img src={logo} alt="Logo" width={27}></img>
         </div>
           <MenuOutlined

@@ -2,10 +2,10 @@ import { Button,Table ,Avatar} from "antd";
 import { EditOutlined} from "@ant-design/icons"
 import { useEffect, useState } from "react";
 import "./form";
-import AppHeader from "../../Components/AppHeader/index";
+import AppHeader from "../../../Components/AppHeader/index";
 import "./style.css";
 import { useNavigate  , NavLink } from 'react-router-dom';
-import api from '../../API/axios';
+import api from '../../../API/axios';
 import countryCodes from './countries.json'; 
 
 

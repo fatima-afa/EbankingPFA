@@ -42,7 +42,7 @@ function SideMenu() {
               {
                 label: "Gérer les utilisateurs",
                 icon: "",
-                key:"/admin/manageUsers",
+                key:"/user/admin/manageUsers",
               },
             ],
           },
@@ -65,18 +65,18 @@ function SideMenu() {
           },
           {
             label: "Variables globales",
-            key: "/variableGlobales",
+            key: "variableGlobales",
             icon: <SettingOutlined />,
             children:[
               {
                 label: "Ajouter une variable globale",
                 icon: "",
-                key:"/admin/VariableGlobale",
+                key:"/admin/ParamGlobale",
               },
               {
                 label: "Gérer les variables globales",
                 icon: "",
-                key:"/admin/VariableGlobale",
+                key:"/admin/manageParam",
               },
             ],
           }

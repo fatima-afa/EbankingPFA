@@ -1,10 +1,9 @@
 import React, { useRef, useState, useEffect, useContext } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 // import AuthContext from "../../context/AuthProvider";
-import api from '../../API/axios';
+import api from '../../../API/axios';
 import "./style.css";
-import AppHeader from '../../Components/AppHeader/index';
-
+import AppHeader from '../../../Components/AppHeader/index';
 
 const ManageDevise = () => {
 
